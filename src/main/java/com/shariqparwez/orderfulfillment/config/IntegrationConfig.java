@@ -38,11 +38,11 @@ public class IntegrationConfig extends CamelConfiguration {
 			@Override
 			public void configure() throws Exception {
 				from("sql:"
-						+ "select id from orders.\"ordertype\" where status = '"
+						+ "select id from orders.ordertype where status = '"
 						+ OrderStatus.NEW.getCode()
 						+ "'"
 						+ "?"
-						+ "consumer.onConsume=update orders.\"ordertype\" set status = '"
+						+ "consumer.onConsume=update orders.ordertype set status = '"
 						+ OrderStatus.PROCESSING.getCode()
 						+ "' where id = :#id")
 				.to("log:com.shariqparwez.orderfulfillment.order?level=INFO");
