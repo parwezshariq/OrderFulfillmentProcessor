@@ -13,7 +13,7 @@ import org.springframework.data.repository.*;
  * 
  */
 public interface OrderRepository extends
-      PagingAndSortingRepository<OrderEntity, Integer> {
+      PagingAndSortingRepository<OrderEntity, Long> {
 
    /**
     * Select all orders for the page ordered by the timeOrderPlaced value in

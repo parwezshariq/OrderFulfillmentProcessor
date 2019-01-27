@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	targetNamespace="http://www.shariqparwez.com/orderfulfillment/Order" 
+	xmlns:tns="http://www.shariqparwez.com/orderfulfillment/Order" 
+	elementFormDefault="qualified">
+
+	<xsd:element name="Order">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="OrderType" type="tns:OrderType" minOccurs="1" maxOccurs="1" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:complexType name="OrderType">
+		<xsd:sequence>
+			<xsd:element name="FirstName" type="xsd:string" minOccurs="1" maxOccurs="1" />
+			<xsd:element name="LastName" type="xsd:string" minOccurs="1" maxOccurs="1" />
+			<xsd:element name="Email" type="xsd:string" minOccurs="1" maxOccurs="1" />
+			<xsd:element name="OrderNumber" type="xsd:string" minOccurs="1" maxOccurs="1" />
+			<xsd:element name="TimeOrderPlaced" type="xsd:dateTime" minOccurs="1" maxOccurs="1" />
+			<xsd:element name="FulfillmentCenter" type="tns:FulfillmentCenter" minOccurs="1" maxOccurs="1" />
+			<xsd:element name="OrderItems" type="tns:OrderItemType" minOccurs="1" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="OrderItemType">
+		<xsd:sequence>
+			<xsd:element name="ItemNumber" type="xsd:string" minOccurs="1" maxOccurs="1" />
+			<xsd:element name="Price" type="xsd:decimal" minOccurs="1" maxOccurs="1" />
+			<xsd:element name="Quantity" type="xsd:int" minOccurs="1" maxOccurs="1" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:simpleType name="FulfillmentCenter" >
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="FulfillmentCenterOne"></xsd:enumeration>
+			<xsd:enumeration value="ABCFulfillmentCenter"></xsd:enumeration>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+</xsd:schema>
