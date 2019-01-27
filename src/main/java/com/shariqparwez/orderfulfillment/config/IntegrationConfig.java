@@ -45,6 +45,7 @@ public class IntegrationConfig extends CamelConfiguration {
 						+ "consumer.onConsume=update orders.ordertype set status = '"
 						+ OrderStatus.PROCESSING.getCode()
 						+ "' where id = :#id")
+				.beanRef("orderItemMessageTranslator", "transformToOrderItemMessage")
 				.to("log:com.shariqparwez.orderfulfillment.order?level=INFO");
 			}
 		};
