@@ -11,6 +11,7 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.camel.component.ActiveMQComponent;
 import org.apache.activemq.pool.PooledConnectionFactory;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.builder.xml.Namespaces;
 import org.apache.camel.component.jms.JmsConfiguration;
 import org.apache.camel.component.sql.SqlComponent;
 import org.apache.camel.spring.javaconfig.CamelConfiguration;
@@ -80,6 +81,32 @@ public class IntegrationConfig extends CamelConfiguration {
 				.beanRef("orderItemMessageTranslator", "transformToOrderItemMessage")
 				//.to("log:com.shariqparwez.orderfulfillment.order?level=INFO");
 				.to("activemq:queue:ORDER_ITEM_PROCESSING");
+			}
+		};
+	}
+	
+	@Bean
+	public RouteBuilder fulfillmentCenterContentBasedRouter() {
+		return new RouteBuilder() {
+			
+			@Override
+			public void configure() throws Exception {
+				Namespaces namespace = new Namespaces("o", "http://www.shariqparwez.com/orderfulfillment/Order");
+				
+				from("activemq:queue:ORDER_ITEM_PROCESSING")
+					.choice()
+					.when()
+					.xpath("/o:Order/o:OrderType/o:FulfillmentCenter = '"
+							+ com.shariqparwez.orderfulfillment.generated.FulfillmentCenter.ABC_FULFILLMENT_CENTER.value()
+							+ "'", namespace)
+					.to("activemq:queue:ABC_FULFILLMENT_REQUEST")
+					.when()
+					.xpath("/o:Order/o:OrderType/o:FulfillmentCenter = '"
+							+ com.shariqparwez.orderfulfillment.generated.FulfillmentCenter.FULFILLMENT_CENTER_ONE.value()
+							+ "'", namespace)
+					.to("activemq:queue:FC1_FULFILLMENT_REQUEST")
+					.otherwise()
+					.to("activemq:queue:ERROR_FULFILLMENT_REQUEST");
 			}
 		};
 	}
